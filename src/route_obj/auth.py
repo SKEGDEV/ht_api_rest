@@ -7,19 +7,20 @@ class o_auth:
     def create_account(self, params, IP:str):
         if(self.userExist(params["usr_name"])):
             return {"msm":"El nombre de usuario ya esta siendo utilizado actualmente", "userExist":"yes"}
+        public_pwd = bcrypt().generate_public_password(12)
         sp = "sp_create_account"
         o_Result = DB().exec_query(sp,[ 
             params["first_name"],
             params["last_name"],
             params["birthday"],
+            bcrypt().generate(params["usr_password"]),
             params["document"],
             params["email"],
             params["phone"],
-            params["usr_name"],
-            bcrypt().generate(params["usr_password"])
+            params["document_type"] 
             ])
         if(not o_Result.get("err")): 
-            return self.create_session_token(o_Result.get("data"), IP)
+            return self.create_session_token({"document":params["document"], "password":public_pwd}, IP)
         return o_Result
 
     def validate_user(self, params, IP:str):
@@ -46,31 +47,21 @@ class o_auth:
         return {"msm":"Que tenga un buen dia, vuelva pronto!"}
 
 
-    def create_session_token(self, data, IP:str):
-        try:
-            token_data = {}
-            name = ""
-            usr_id = 0
-            for d in data:
-                usr_id = d[0]
-                token_data = {
-                        "id":d[0]
-                        }
-                name=d[1]
-            token_db = token_decorator().generate_token({"id":usr_id, "ip":IP})
+    def create_session_token(self, data:dict, IP:str):
+        try: 
+            token_db = token_decorator().generate_token({'document':data.get('document'), "ip":IP})
             sp = "sp_update_teacher_token"
-            o_Result = DB().exec_query(sp, [token_db, usr_id])
+            o_Result = DB().exec_query(sp, [token_db, data.get("document")])
             if(not o_Result.get("err") and len(o_Result.get("data")) > 0):
-                return {"msm":("Bienvenido/a gracias por su preferencia sr/sra: "+name),
-                        "name":name,
-                        "token":token_decorator().generate_token(token_data)}
+                return {"msm":("Bienvenido/a gracias por su preferencia sr/sra: "),
+                        "token":token_decorator().generate_token(data)}
             return o_Result 
         except Exception as e:
             return {"msm":"Ocurrio un error durante la generacion del token", "err":str(e)}
 
-    def userExist(self, usr_name:str):
+    def userExist(self, document_number:str):
         sp = 'sp_get_teacher_session'
-        o_Result = DB().exec_query(sp, [usr_name]) 
+        o_Result = DB().exec_query(sp, [document_number]) 
         if(not o_Result.get("err") and len(o_Result.get("data"))<1):
             return False
         return True 
