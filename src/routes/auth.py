@@ -53,7 +53,7 @@ def signout():
     try: 
         token = request.headers['Authorization'].split(" ")[1]
         data = token_decorator().decrypt_token(token)
-        json = o_auth().logout(data.get("id"))
+        json = o_auth().logout(data.get("document"))
         response = jsonify(json)
         if(not json.get("err")):
             response.status_code = 200
