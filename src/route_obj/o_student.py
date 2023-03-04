@@ -2,14 +2,13 @@ from src.util.database import DB
 
 class o_student:
 
-    def make_class_list(self, params, user_id):
+    def make_class_list(self, params, document:str):
         sp = "sp_create_class_list"
-        o_Result = DB().exec_query(sp, [params["name"], user_id])
+        o_Result = DB().exec_query(sp, [params["name"], document])
         if(not o_Result.get("err")):
             list_id = 0
             for d in  o_Result.get("data"):
-               list_id = d[0]  
-            print(list_id)
+               list_id = d[0]
             return self.insert_students(params["data"], list_id)
         return o_Result
 
@@ -18,7 +17,16 @@ class o_student:
         sp = "sp_create_student"
         o_Result = {}
         for d in student_list:
-            o_Result = DB().exec_query(sp, [d["first_name"], d["last_name"], d["birthday"], list_id])
+            o_Result = DB().exec_query(sp, [
+                 d["first_name"],
+                 d["last_name"],
+                 d["code"],
+                 list_id,
+                 d["birthday"],
+                 d["mother_number"],
+                 d["father_number"],
+                 d["phone_number"]
+                ])
         if(not o_Result.get("err")):
             return {"msm":"Se ha creado el listado de estudiantes correctamente"}
         return o_Result

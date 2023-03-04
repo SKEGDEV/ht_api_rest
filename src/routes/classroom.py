@@ -10,7 +10,7 @@ def create():
     data = request.get_json()
     token = request.headers["Authorization"].split(" ")[1]
     token_data = token_decorator().decrypt_token(token)
-    json = o_classroom().create_classroom(data, token_data.get("id"))
+    json = o_classroom().create_classroom(data, token_data.get("document"))
     response = jsonify(json)
     if(not json.get("err")):
         response.status_code = 200
@@ -23,7 +23,7 @@ def create():
 def get():
     token = request.headers["Authorization"].split(" ")[1]
     token_data = token_decorator().decrypt_token(token)
-    json = o_classroom().get_classrooms(token_data.get("id"))
+    json = o_classroom().get_classrooms(token_data.get("document"))
     response = jsonify(json)
     if(not json.get("err")):
         response.status_code = 200
