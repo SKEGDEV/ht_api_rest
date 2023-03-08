@@ -5,20 +5,17 @@ from src.util.bcrypt import bcrypt
 class o_auth:
     
     def create_account(self, params, IP:str):
-        if(self.userExist(params["document"])):
-            return {"msm":"El nombre de usuario ya esta siendo utilizado actualmente", "userExist":"yes"}
+        # if(self.userExist(params["document"])):
+        #     return {"msm":"El nombre de usuario ya esta siendo utilizado actualmente", "userExist":"yes"}
         public_pwd = bcrypt().generate_public_password(12)
         sp = "sp_create_account"
-        o_Result = DB().exec_query(sp,[ 
-            params["first_name"],
-            params["last_name"],
-            params["birthday"],
-            bcrypt().generate(params["usr_password"]),
-            params["document"],
-            params["email"],
-            params["phone"],
-            params["document_type"] 
-            ])
+        o_Result = DB().exec_query(sp, [params["first_name"],
+                                        params["last_name"],
+                                        params["birthday"],
+                                        bcrypt().generate(params["usr_password"]),
+                                        params["document"],params["email"],
+                                        params["phone"],
+                                        params["document_type"]])
         if(not o_Result.get("err")): 
             return self.create_session_token({"document":params["document"], "password":public_pwd, "variant":1}, IP)
         return o_Result
@@ -36,7 +33,7 @@ class o_auth:
             password = d[0]
         if(not bcrypt().match(params["password"], password)):
             return{"msm":"El usuario y/o la contrasena son incorrectos", "isValid":"not"}
-        return self.create_session_token({"document":params["document"], "password":public_pwd, "variant":2}, IP)
+        return self.create_session_token({"document":params["document_number"], "password":public_pwd, "variant":2}, IP)
 
     def logout(self, document_number):
         sp = "sp_update_teacher_token"

@@ -10,27 +10,27 @@ class DB:
         try:
             key_connect = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path, 0, winreg.KEY_READ)
             key = winreg.QueryValueEx(key_connect, key_name)
-            winreg.CloseKey(key_connect)
+            winreg.CloseKey(key_connect) 
             return key
         except:
             try:
                 path = r"SOFTWARE\WOW6432Node\happyt"
                 key_connect = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path, 0, winreg.KEY_READ)
                 key = winreg.QueryValueEx(key_connect, key_name)
-                winreg.CloseKey(key_connect)
+                winreg.CloseKey(key_connect) 
                 return key
             except Exception as e:
                 return ["Ha ocurrido un error",str(e)]
 
     def get_connect(self):
         try:
-            key = token().decrypt_token(self.get_key(str(getenv("db_base_token")))[0])
+            key = token().decrypt_token(self.get_key(str(getenv("db_happyT")))[0]) 
             connect = mysql.connect(
                     host=key.get("host"),
                     user=key.get("usr"),
                     password=key.get("pssw"),
                     database=key.get("db")
-                    )
+                    ) 
             return connect
         except Exception as e:
             return{"msm":"Ha ocurrido un error de conexion con la base de datos", "err":str(e)}
@@ -48,3 +48,4 @@ class DB:
             return{"data":data, "result":query_result, "msm":"Consulta realizada con exito"}
         except Exception as e:
             return {"msm":"Ocurrio un error durante la consulta","err":str(e)}
+
