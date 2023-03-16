@@ -5,8 +5,8 @@ from src.util.bcrypt import bcrypt
 class o_auth:
     
     def create_account(self, params, IP:str):
-        # if(self.userExist(params["document"])):
-        #     return {"msm":"El nombre de usuario ya esta siendo utilizado actualmente", "userExist":"yes"}
+        if(self.userExist(params["document"])):
+            return {"msm":"El numero de documento ya ha sido utilizado", "userExist":"yes"}
         public_pwd = bcrypt().generate_public_password(12)
         sp = "sp_create_account"
         o_Result = DB().exec_query(sp, [params["first_name"],
@@ -36,7 +36,7 @@ class o_auth:
         return self.create_session_token({"document":params["document_number"], "password":public_pwd, "variant":2}, IP)
 
     def logout(self, document_number):
-        sp = "sp_update_teacher_token"
+        sp = "sp_update_teacher_session"
         o_Result = DB().exec_query(sp, [document_number, "", "", 3])
         if(o_Result.get("err")):
             return o_Result

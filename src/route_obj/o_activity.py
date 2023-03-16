@@ -3,29 +3,36 @@ from src.util.database import DB
 class o_activity:
 
     def create_activity(self, params): 
-        if(self.isActivityAvailable(params["unit_class"], params["qualification"])):
+        if(self.isActivityAvailable(params["Clist"], params["number"], params["qualification"])):
             return{"err":"error", "msm":"Perdon la calificacion para esta actividad excede el punteo total del curso"}
         sp = "sp_create_activity"
-        o_Result = DB().exec_query(sp, [params["name"], params["qualification"], params["type"], params["unit_class"]])
+        o_Result = DB().exec_query(sp, [
+                                        params["name"],
+                                        params["qualification"],
+                                        params["Clist"],
+                                        params["type"],
+                                        params["subtype"],
+                                        params["number"]
+                                        ])
         if(not o_Result.get("err")):
             return{"msm":"se ha creado con exito la actividad"}
         return o_Result
 
-    def isActivityAvailable(self, unit_id:int, activity_qualification:float):
+    def isActivityAvailable(self, clist:int, number:int, activity_qualification:float):
         sp = "sp_get_total_points"
-        o_Result = DB().exec_query(sp, [unit_id]) 
+        o_Result = DB().exec_query(sp, [clist, number]) 
         if(not o_Result.get("err") and len(o_Result.get("data")) != 0):
             db_points = 0
-            for d in o_Result.get("data"):
+            for d in o_Result.get("data"): 
                 db_points = d[0]
             if(not (float(db_points) + activity_qualification) > 100):
                 return False
             return True
         return True
 
-    def get_all_activities(self, unit_id:int):
+    def get_all_activities(self, clist:int, unit_number:int):
         sp = "sp_get_all_activity"
-        o_Result = DB().exec_query(sp, [unit_id])
+        o_Result = DB().exec_query(sp, [clist, unit_number])
         if(not o_Result.get("err")):
             return{
                     "msm":("Total actividades encontradas: " + str(len(o_Result.get("data")))),

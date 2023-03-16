@@ -17,10 +17,10 @@ def create():
     response.status_code = 402
     return response
 
-@activity.route('/get-activities/<int:id>', methods=['GET'])
+@activity.route('/get-activities/<int:clist>/<int:unit>', methods=['GET'])
 @token_decorator().token_required
-def get_activities(id):
-    json = o_activity().get_all_activities(id)
+def get_activities(clist, unit):
+    json = o_activity().get_all_activities(clist, unit)
     response = jsonify(json)
     if(not json.get("err")):
         response.status_code = 200

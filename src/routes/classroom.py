@@ -31,10 +31,11 @@ def get():
     response.status_code=403
     return response
 
-@classroom.route("/get-all-unit/<int:id>", methods=["GET"])
+@classroom.route("/student_2_classroom", methods=["POST"])
 @token_decorator().token_required
-def get_unit(id):
-    json = o_classroom().get_all_unit(id)
+def get_unit():
+    data = request.get_json()
+    json = o_classroom().list2classroom(data)
     response = jsonify(json)
     if(not json.get("err")):
         response.status_code = 200
@@ -42,10 +43,10 @@ def get_unit(id):
     response.status_code = 403
     return response
 
-@classroom.route("/get-all-unit-student/<int:id>", methods = ["GET"])
+@classroom.route("/get-all-unit-student/<int:c_id>/<int:unit_number>", methods = ["GET"])
 @token_decorator().token_required
-def get_Ustudent(id):
-    json = o_classroom().get_all_Ustudents(id)
+def get_Ustudent(c_id, unit_number):
+    json = o_classroom().get_all_Ustudents(unit_number, c_id)
     response = jsonify(json)
     if(not json.get("err")):
         response.status_code = 200
