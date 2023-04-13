@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from werkzeug.wrappers import response
 from src.route_obj.o_student import o_student
 from src.util.token_decorator import token_decorator
 
@@ -16,5 +17,18 @@ def create():
         response.status_code = 200
         return response
     response.status_code = 402
+    return response
+
+@student.route('/get-all-list', methods=['GET'])
+@token_decorator().token_required
+def get():
+    token = request.headers["Authorization"].split(" ")[1]
+    token_data = token_decorator().decrypt_token(token)
+    json = o_student().get_all_teacher_list(token_data.get("document"))
+    response = jsonify(json)
+    if(not json.get("err")):
+        response.status_code = 200
+        return response
+    response.status_code = 403
     return response
 

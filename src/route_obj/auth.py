@@ -13,7 +13,8 @@ class o_auth:
                                         params["last_name"],
                                         params["birthday"],
                                         bcrypt().generate(params["usr_password"]),
-                                        params["document"],params["email"],
+                                        params["document"],
+                                        params["email"],
                                         params["phone"],
                                         params["document_type"]])
         if(not o_Result.get("err")): 
