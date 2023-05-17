@@ -69,4 +69,10 @@ def signout():
         return response
 
 
-
+@auth.route('/verify-session', methods=["GET"])
+@token_decorator().token_required
+def verify():
+    return jsonify({
+        "msm":"success",
+        "auth":"true"
+        });

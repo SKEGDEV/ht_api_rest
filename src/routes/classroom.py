@@ -1,4 +1,5 @@
 from flask import request, jsonify, Blueprint
+from werkzeug.wrappers import response
 from src.util.token_decorator import token_decorator
 from src.route_obj.classroom import o_classroom
 
@@ -52,4 +53,15 @@ def get_Ustudent(c_id, unit_number):
         response.status_code = 200
         return response
     response.status_code = 403
+    return response
+
+@classroom.route("/get-clist/<int:id>", methods=["GET"])
+@token_decorator().token_required
+def get_Clist(id):
+    json = o_classroom().get_clist(id)
+    response = jsonify(json)
+    if(not json.get("err")):
+        response.status_code=200
+        return response
+    response.status_code=403
     return response
