@@ -14,7 +14,7 @@ def create():
     if(not json.get('err')):
         response.status_code = 200
         return response
-    response.status_code = 402
+    response.status_code = 403
     return response
 
 @activity.route('/get-activities/<int:clist>/<int:unit>', methods=['GET'])
@@ -44,6 +44,17 @@ def get_students(id):
 def qualified():
     data = request.get_json()
     json = o_activity().qualified(data)
+    response = jsonify(json)
+    if(not json.get("err")):
+        response.status_code = 200
+        return response
+    response.status_code = 403
+    return response
+
+@activity.route('/get-student-information/<int:id>', methods=['GET'])
+@token_decorator().token_required
+def get_information(id):
+    json = o_activity().get_student(id)
     response = jsonify(json)
     if(not json.get("err")):
         response.status_code = 200

@@ -5,26 +5,6 @@ from src.util.token_decorator import token_decorator
 
 auth = Blueprint('auth', __name__)
 
- 
-# @auth.route('/test', methods=['GET'])
-# def test():
-#     data=[]
-#     try:
-#         connect = DB().get_connect()
-#         cursor = connect.cursor()
-#         cursor.callproc('sp_get_teacher_session', ["hola"])
-#         data = cursor.stored_results()
-#         connect.commit()
-#         send = []
-#         for d in data:
-#             send = d.fetchall()
-#     except Exception as e:
-#         return jsonify({"err":str(e)})
-#     return jsonify({
-#         "key": send 
-#         })
-
-
 @auth.route('/create-account', methods=['POST'])
 def create():
     data = request.get_json()
