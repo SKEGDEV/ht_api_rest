@@ -38,5 +38,59 @@ class o_student:
             return {"msm":"Estos son todos los listados creados por ti", "data":o_Result.get("data")}
         return o_Result
 
+    def get_student_list(self, list_id:int):
+        sp = "sp_getstudent_list"
+        o_Result = DB().exec_query(sp, [list_id])
+        if(not o_Result.get("err")):
+            return {
+                    "msm":"success",
+                    "data":o_Result.get("data")
+                    }
+        return o_Result
 
+    def add_student_out(self, params):
+        sp = "sp_add_student_out_list"
+        o_Result = DB().exec_query(sp, [
+            params["list_id"],
+            params["first_name"],
+            params["last_name"],
+            params["code"],
+            params["birthday"],
+            params["mother_number"],
+            params["father_number"],
+            params["phone_number"]
+            ])
+        if(not o_Result.get("err")):
+            return{
+                    "msm":"El estudiante se ha agregado correctamente, tanto en actividades como en cursos"
+                    }
+        return o_Result
+
+    def get_student2update(self, student_id:int):
+        sp = "sp_get_student2update"
+        o_Result = DB().exec_query(sp, [student_id])
+        if(not o_Result.get("err")):
+            return{
+                    "msm":"success",
+                    "data":o_Result.get("data")
+                    }
+        return o_Result
+    
+    def update_student_info(self, params):
+        sp="sp_update_student"
+        o_Result=DB().exec_query(sp, [
+            params["s_id"],
+            params["first_name"],
+            params["last_name"],
+            params["code"],
+            params["birthday"],
+            params["mother_number"],
+            params["father_number"],
+            params["phone_number"]
+            ])
+        if(not o_Result.get("err")):
+            return{
+                    "msm":"Se ha actualizado la informacion del estudiante con exito"
+                    }
+        return o_Result
 
