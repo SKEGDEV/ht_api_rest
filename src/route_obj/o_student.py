@@ -94,3 +94,22 @@ class o_student:
                     }
         return o_Result
 
+    def get_student_file(self, s_id:int):
+        sp="sp_get_student_file"
+        o_student = DB().exec_query(sp,[s_id, 0])
+        o_classroom = DB().exec_query(sp, [s_id, 1])
+        o_activities = DB().exec_query(sp, [s_id, 2])
+        if(not o_student.get('err') or not o_classroom.get("err") or not o_activities.get("err")):
+            return{
+                    "msm":"success",
+                    "o_student":o_student.get("data"),
+                    "o_classroom":o_classroom.get("data"),
+                    "o_activities":o_activities.get("data")
+                    }
+        if(o_student.get("err")):
+            return o_student
+        if(o_classroom.get("err")):
+            return o_classroom
+        if(o_activities.get("err")):
+            return o_activities
+

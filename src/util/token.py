@@ -7,7 +7,7 @@ class token:
 
     def generate_token(self, token_data:dict): 
         return encode(
-                payload={**token_data, "expiration":str(datetime.now() + timedelta(days=2))},
+                payload={**token_data, "expiration":str(datetime.now() + timedelta(days=7))},
                 key=str(getenv("token_key")),
                 algorithm=str(getenv("algorithm"))
                 )

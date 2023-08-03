@@ -77,3 +77,14 @@ def update_information():
         return response
     response.status_code=403
     return response
+
+@student.route('/get-student-file/<int:s_id>', methods=['GET'])
+@token_decorator().token_required
+def get_file(s_id):
+    json = o_student().get_student_file(s_id)
+    response = jsonify(json)
+    response.status_code=200
+    if(json.get("err")):
+        response.status_code=403
+    return response
+    
