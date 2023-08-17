@@ -2,17 +2,12 @@ from flask import Flask
 from flask_cors import CORS
 from os import getenv
 from dotenv import load_dotenv
-#Blueprint for session
+#Blueprints
 from src.routes.auth import auth
 from src.routes.student import student 
 from src.routes.classroom import classroom
 from src.routes.activity import activity
 from src.routes.catalogs import catalogs
-#Blueprint for profile operations
-
-#Blueprint for activities operations
-
-#Blueprint for student operations
 
 server_api = Flask(__name__)
 CORS(server_api)

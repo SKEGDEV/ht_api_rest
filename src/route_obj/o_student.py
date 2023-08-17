@@ -1,4 +1,5 @@
 from src.util.database import DB
+from src.util.tools import tools
 
 class o_student:
 
@@ -112,4 +113,15 @@ class o_student:
             return o_classroom
         if(o_activities.get("err")):
             return o_activities
+
+    def get_qualification(self):
+        oData = {
+                "q_header":[],
+                "o_qualification":[]
+                }
+        oRpt = {
+                "rpt_type":"qa",
+                "rpt_extend_data":{}
+                }
+        return tools().consume_reportApi(oData, oRpt)
 

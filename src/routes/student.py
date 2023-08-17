@@ -87,4 +87,14 @@ def get_file(s_id):
     if(json.get("err")):
         response.status_code=403
     return response
+
+@student.route('/get-student-qualification', methods=["GET"])
+@token_decorator().token_required
+def get_file_qualification():
+    json = o_student().get_qualification()
+    response = jsonify(json)
+    response.status_code = 200
+    if(json['msm'] != "success"):
+        response.status_code = 403
+    return response
     
