@@ -1,7 +1,6 @@
 from src.util.database import DB
 from os import getenv
 import requests
-from flask import jsonify
 import json
 
 class tools:

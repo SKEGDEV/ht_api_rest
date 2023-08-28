@@ -19,12 +19,12 @@ def create():
     response.status_code = 403
     return response
 
-@classroom.route("/get-classrooms", methods=["GET"])
+@classroom.route("/get-classrooms/<int:variant>/<int:year>", methods=["GET"])
 @token_decorator().token_required
-def get():
+def get(variant, year):
     token = request.headers["Authorization"].split(" ")[1]
     token_data = token_decorator().decrypt_token(token)
-    json = o_classroom().get_classrooms(token_data.get("document"))
+    json = o_classroom().get_classrooms(token_data.get("document"), variant, year)
     response = jsonify(json)
     if(not json.get("err")):
         response.status_code = 200

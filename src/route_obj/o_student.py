@@ -4,8 +4,9 @@ from src.util.tools import tools
 class o_student:
 
     def make_class_list(self, params, document:str):
+        print(params)
         sp = "sp_create_class_list"
-        o_Result = DB().exec_query(sp, [params["name"], document])
+        o_Result = DB().exec_query(sp, [params["listParams"]["grade"], params["listParams"]["section"], params["listParams"]["level"], document])
         if(not o_Result.get("err")):
             list_id = 0
             for d in  o_Result.get("data"):
@@ -113,6 +114,26 @@ class o_student:
             return o_classroom
         if(o_activities.get("err")):
             return o_activities
+
+    def get_list_catalogs(self):
+        o_Grade = tools().get_catalogs(6,0)
+        o_section = tools().get_catalogs(7,0)
+        o_level = tools().get_catalogs(8,0)
+        if(not o_Grade.get("err") or not o_section.get("err") or not o_level.get("err")):
+            return{
+                    "msm":"success",
+                    "data":{
+                        "oGrade":o_Grade.get("data"),
+                        "oSection":o_section.get("data"),
+                        "oLevel": o_level.get("data")
+                        } 
+                    }
+        if(o_Grade.get("err")):
+            return o_Grade
+        if(o_section.get("err")):
+            return o_section
+        if(o_level.get("err")):
+            return o_level
 
     def get_qualification(self):
         oData = {

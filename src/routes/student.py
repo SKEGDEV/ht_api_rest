@@ -98,3 +98,12 @@ def get_file_qualification():
         response.status_code = 403
     return response
     
+@student.route('/get-catalogs', methods=['GET'])
+@token_decorator().token_required
+def get_catalogs():
+    json = o_student().get_list_catalogs()
+    response = jsonify(json)
+    response.status_code = 200
+    if(json.get("err")):
+        response.status_code = 403
+    return response

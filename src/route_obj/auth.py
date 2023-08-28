@@ -11,6 +11,8 @@ class o_auth:
         sp = "sp_create_account"
         o_Result = DB().exec_query(sp, [params["first_name"],
                                         params["last_name"],
+                                        params["school_name"],
+                                        params["school_direction"],
                                         params["birthday"],
                                         bcrypt().generate(params["usr_password"]),
                                         params["document"],

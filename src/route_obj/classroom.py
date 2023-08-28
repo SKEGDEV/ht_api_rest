@@ -31,12 +31,12 @@ class o_classroom:
         return False
             
 
-    def get_classrooms(self, document_number:str):
+    def get_classrooms(self, document_number:str, variant:int, year:int):
         sp = "sp_get_all_classroom"
-        o_Result = DB().exec_query(sp, [document_number])
+        o_Result = DB().exec_query(sp, [document_number, year, variant])
         if(not o_Result.get("err")):
             return{
-                    "msm":("Total clases encontradas: " + str(len(o_Result.get("data")))),
+                    "msm":("success"),
                     "data": o_Result.get("data")
                     }
         return o_Result
@@ -46,7 +46,7 @@ class o_classroom:
         o_Result = DB().exec_query(sp, [Clist_id, unit_number])
         if(not o_Result.get("err")):
             return {
-                    "msm":("Total estudiantes encontrados: " + str(len(o_Result.get("data")))),
+                    "msm":("success"),
                     "data": o_Result.get("data")
                     }
         return o_Result
