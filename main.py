@@ -8,6 +8,7 @@ from src.routes.student import student
 from src.routes.classroom import classroom
 from src.routes.activity import activity
 from src.routes.catalogs import catalogs
+from src.routes.Rpt_routes import rpt
 
 server_api = Flask(__name__)
 CORS(server_api)
@@ -18,6 +19,7 @@ server_api.register_blueprint(student, url_prefix='/student')
 server_api.register_blueprint(classroom, url_prefix='/classroom')
 server_api.register_blueprint(activity, url_prefix='/activity')
 server_api.register_blueprint(catalogs, url_prefix='/catalogs')
+server_api.register_blueprint(rpt, url_prefix='/rpt')
 
 
 if __name__ == '__main__':

@@ -135,14 +135,5 @@ class o_student:
         if(o_level.get("err")):
             return o_level
 
-    def get_qualification(self):
-        oData = {
-                "q_header":[],
-                "o_qualification":[]
-                }
-        oRpt = {
-                "rpt_type":"qa",
-                "rpt_extend_data":{}
-                }
-        return tools().consume_reportApi(oData, oRpt)
+
 

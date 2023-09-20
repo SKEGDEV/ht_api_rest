@@ -5,8 +5,8 @@ from src.util.bcrypt import bcrypt
 class o_auth:
     
     def create_account(self, params, IP:str):
-        if(self.userExist(params["document"])):
-            return {"msm":"El numero de documento ya ha sido utilizado", "userExist":"yes"}
+        if(self.userExist(params["document"], params["document_type"])):
+            return {"msm":"El numero de documento ya ha sido registrado anteriormente", "userExist":"yes"}
         public_pwd = bcrypt().generate_public_password(12)
         sp = "sp_create_account"
         o_Result = DB().exec_query(sp, [params["first_name"],
@@ -26,7 +26,7 @@ class o_auth:
     def validate_user(self, params, IP:str):
         public_pwd = bcrypt().generate_public_password(12)
         sp = "sp_get_teacher_session"
-        o_Result = DB().exec_query(sp, [params["document_number"]])
+        o_Result = DB().exec_query(sp, [params["document_number"], params["document_type"]])
         password = ""
         if(o_Result.get("err")):
             return o_Result
@@ -67,10 +67,12 @@ class o_auth:
         except Exception as e:
             return {"msm":"Ocurrio un error durante la generacion del token", "err":str(e)}
 
-    def userExist(self, document_number:str):
+    def userExist(self, document_number:str, document:int):
         sp = 'sp_get_teacher_session'
-        o_Result = DB().exec_query(sp, [document_number]) 
+        o_Result = DB().exec_query(sp, [document_number, document]) 
         if(not o_Result.get("err") and len(o_Result.get("data"))<1):
+            return False
+        if(o_Result.get("err")):
             return False
         return True 
 

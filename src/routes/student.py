@@ -1,5 +1,4 @@
-from flask import Blueprint, Response, request, jsonify
-from werkzeug.wrappers import response
+from flask import Blueprint, request, jsonify
 from src.route_obj.o_student import o_student
 from src.util.token_decorator import token_decorator
 
@@ -86,16 +85,6 @@ def get_file(s_id):
     response.status_code=200
     if(json.get("err")):
         response.status_code=403
-    return response
-
-@student.route('/get-student-qualification', methods=["GET"])
-@token_decorator().token_required
-def get_file_qualification():
-    json = o_student().get_qualification()
-    response = jsonify(json)
-    response.status_code = 200
-    if(json['msm'] != "success"):
-        response.status_code = 403
     return response
     
 @student.route('/get-catalogs', methods=['GET'])
